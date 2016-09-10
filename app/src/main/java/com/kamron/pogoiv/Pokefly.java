@@ -402,17 +402,25 @@ public class Pokefly extends Service {
      * If both exist then the user is on the pokemon screen.
      */
     private void scanPokemonScreen() {
+        Optional<Boolean> shouldShow = isPokemonScreen();
+        if (shouldShow.isPresent()) {
+            setIVButtonDisplay(shouldShow.get());
+        }
+    }
+
+    private Optional<Boolean> isPokemonScreen() {
         Bitmap bmp = screen.grabScreen();
         if (bmp == null) {
-            return;
+            return Optional.absent();
         }
 
         if (bmp.getHeight() > bmp.getWidth()) {
             boolean shouldShow = bmp.getPixel(areaX1, areaY1) == Color.rgb(250, 250, 250)
                     && bmp.getPixel(areaX2, areaY2) == Color.rgb(28, 135, 150);
-            setIVButtonDisplay(shouldShow);
+            return Optional.of(shouldShow);
         }
         bmp.recycle();
+        return Optional.absent();
     }
 
     private boolean infoLayoutArcPointerVisible = false;
