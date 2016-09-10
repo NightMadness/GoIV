@@ -16,6 +16,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -119,11 +120,8 @@ public class Pokefly extends Service {
     private OcrHelper ocr;
 
     private Timer timer;
-    private int areaX1;
-    private int areaY1;
-    private int areaX2;
-    private int areaY2;
-
+    private Point area1 = new Point();
+    private Point area2 = new Point();
 
     private boolean infoShownSent = false;
     private boolean infoShownReceived = false;
@@ -376,11 +374,11 @@ public class Pokefly extends Service {
     }
 
     private void startPeriodicScreenScan() {
-        areaX1 = Math.round(displayMetrics.widthPixels / 24);  // these values used to get "white" left of "power up"
-        areaY1 = (int) Math.round(displayMetrics.heightPixels / 1.24271845);
-        areaX2 = (int) Math.round(
+        area1.x = Math.round(displayMetrics.widthPixels / 24);  // these values used to get "white" left of "power up"
+        area1.y = (int) Math.round(displayMetrics.heightPixels / 1.24271845);
+        area2.x = (int) Math.round(
                 displayMetrics.widthPixels / 1.15942029);  // these values used to get greenish color in transfer button
-        areaY2 = (int) Math.round(displayMetrics.heightPixels / 1.11062907);
+        area2.y = (int) Math.round(displayMetrics.heightPixels / 1.11062907);
         final Handler handler = new Handler();
         timer = new Timer();
         TimerTask doAsynchronousTask = new TimerTask() {
@@ -402,21 +400,21 @@ public class Pokefly extends Service {
      * If both exist then the user is on the pokemon screen.
      */
     private void scanPokemonScreen() {
-        Optional<Boolean> shouldShow = isPokemonScreen();
+        Optional<Boolean> shouldShow = isPokemonScreen(area1, area2);
         if (shouldShow.isPresent()) {
             setIVButtonDisplay(shouldShow.get());
         }
     }
 
-    private Optional<Boolean> isPokemonScreen() {
+    private Optional<Boolean> isPokemonScreen(Point area1, Point area2) {
         Bitmap bmp = screen.grabScreen();
         if (bmp == null) {
             return Optional.absent();
         }
 
         if (bmp.getHeight() > bmp.getWidth()) {
-            boolean shouldShow = bmp.getPixel(areaX1, areaY1) == Color.rgb(250, 250, 250)
-                    && bmp.getPixel(areaX2, areaY2) == Color.rgb(28, 135, 150);
+            boolean shouldShow = bmp.getPixel(area1.x, area1.y) == Color.rgb(250, 250, 250)
+                    && bmp.getPixel(area2.x, area2.y) == Color.rgb(28, 135, 150);
             return Optional.of(shouldShow);
         }
         bmp.recycle();
