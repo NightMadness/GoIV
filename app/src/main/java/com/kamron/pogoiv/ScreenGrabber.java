@@ -2,7 +2,9 @@ package com.kamron.pogoiv;
 
 import android.annotation.TargetApi;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
+import android.graphics.Point;
 import android.hardware.display.DisplayManager;
 import android.media.Image;
 import android.media.ImageReader;
@@ -10,6 +12,8 @@ import android.media.projection.MediaProjection;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
+
+import com.google.common.base.Optional;
 
 import java.nio.ByteBuffer;
 
@@ -105,5 +109,20 @@ public class ScreenGrabber {
         }
 
         return bmp;
+    }
+
+    public Optional<Boolean> isPokemonScreen(Point area1, Point area2) {
+        Bitmap bmp = grabScreen();
+        if (bmp == null) {
+            return Optional.absent();
+        }
+
+        if (bmp.getHeight() > bmp.getWidth()) {
+            boolean shouldShow = bmp.getPixel(area1.x, area1.y) == Color.rgb(250, 250, 250)
+                    && bmp.getPixel(area2.x, area2.y) == Color.rgb(28, 135, 150);
+            return Optional.of(shouldShow);
+        }
+        bmp.recycle();
+        return Optional.absent();
     }
 }
