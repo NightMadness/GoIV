@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.hardware.display.DisplayManager;
+import android.hardware.display.VirtualDisplay;
 import android.media.Image;
 import android.media.ImageReader;
 import android.media.projection.MediaProjection;
@@ -30,6 +31,7 @@ public class ScreenGrabber {
     private MediaProjection projection = null;
     private DisplayMetrics rawDisplayMetrics;
     private DisplayMetrics displayMetrics;
+    private VirtualDisplay virtualDisplay;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private ScreenGrabber(MediaProjection mediaProjection, DisplayMetrics raw, DisplayMetrics display) {
@@ -38,7 +40,8 @@ public class ScreenGrabber {
         projection = mediaProjection;
         imageReader = ImageReader.newInstance(rawDisplayMetrics.widthPixels, rawDisplayMetrics.heightPixels,
                 PixelFormat.RGBA_8888, 2);
-        projection.createVirtualDisplay("screen-mirror", rawDisplayMetrics.widthPixels, rawDisplayMetrics.heightPixels,
+        virtualDisplay = projection.createVirtualDisplay("screen-mirror", rawDisplayMetrics.widthPixels,
+                rawDisplayMetrics.heightPixels,
                 rawDisplayMetrics.densityDpi, DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC, imageReader.getSurface(),
                 null, null);
     }
@@ -63,6 +66,8 @@ public class ScreenGrabber {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void exit() {
         if (projection != null) {
+            virtualDisplay.release();
+            virtualDisplay = null;
             imageReader.close();
             imageReader = null;
             projection.stop();
