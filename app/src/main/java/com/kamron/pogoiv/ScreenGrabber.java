@@ -10,6 +10,7 @@ import android.media.Image;
 import android.media.ImageReader;
 import android.media.projection.MediaProjection;
 import android.os.Build;
+import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 
@@ -111,18 +112,45 @@ public class ScreenGrabber {
         return bmp;
     }
 
+    //Inspired by http://stackoverflow.com/a/27655022/53974.
+    private static @ColorInt int getPixel(ByteBuffer buffer, Point pos, int pixelStride, int rowStride) {
+        int offset = pos.y * rowStride + pos.x * pixelStride;
+        int pixel = 0;
+        pixel |= (buffer.get(offset) & 0xff) << 16;     // R
+        pixel |= (buffer.get(offset + 1) & 0xff) << 8;  // G
+        pixel |= (buffer.get(offset + 2) & 0xff);       // B
+        pixel |= (buffer.get(offset + 3) & 0xff) << 24; // A
+        return pixel;
+    }
+
     public Optional<Boolean> isPokemonScreen(Point area1, Point area2) {
-        Bitmap bmp = grabScreen();
-        if (bmp == null) {
-            return Optional.absent();
+        Image image = null;
+        Optional<Boolean> ret = Optional.absent();
+        try {
+            //Note: imageReader shouldn't be null, but apparently sometimes is.
+            //Let's allow this to still happen.
+            image = imageReader.acquireNextImage();
+        } catch (Exception exception) {
+            Timber.e("Error thrown in isPokemonScreen() - acquireNextImage()");
+            Timber.e(exception);
         }
 
-        if (bmp.getHeight() > bmp.getWidth()) {
-            boolean shouldShow = bmp.getPixel(area1.x, area1.y) == Color.rgb(250, 250, 250)
-                    && bmp.getPixel(area2.x, area2.y) == Color.rgb(28, 135, 150);
-            return Optional.of(shouldShow);
+        if (image == null) {
+            return ret;
         }
-        bmp.recycle();
-        return Optional.absent();
+
+        if (image.getHeight() > image.getWidth()) {
+            Image.Plane imgPlane = image.getPlanes()[0];
+            int pixelStride = imgPlane.getPixelStride();
+            int rowStride = imgPlane.getRowStride();
+            ByteBuffer buffer = imgPlane.getBuffer();
+
+            boolean shouldShow = getPixel(buffer, area1, pixelStride, rowStride) == Color.rgb(250, 250, 250)
+                    && getPixel(buffer, area2, pixelStride, rowStride) == Color.rgb(28, 135, 150);
+            ret = Optional.of(shouldShow);
+        }
+
+        image.close();
+        return ret;
     }
 }
