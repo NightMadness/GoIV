@@ -29,6 +29,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -375,6 +376,7 @@ public class Pokefly extends Service {
                 (int) Math.round(displayMetrics.widthPixels / 1.15942029),
                 (int) Math.round(displayMetrics.heightPixels / 1.11062907));
         final Handler handler = new Handler();
+        Log.d("nahojjjen", "Starting periodic screen scan...");
         timer = new Timer();
         TimerTask doAsynchronousTask = new TimerTask() {
             @Override
@@ -387,6 +389,7 @@ public class Pokefly extends Service {
             }
         };
         timer.schedule(doAsynchronousTask, 0, 750);
+        Log.d("nahojjjen", "Starting periodic screen scan was sucessful");
     }
 
     /**
@@ -397,10 +400,19 @@ public class Pokefly extends Service {
     private void scanPokemonScreen() {
         @ColorInt int[] pixels = screen.grabPixels(area);
 
+        Log.d("nahojjjen", "Starting a screen scan...");
         if (pixels != null) {
             boolean shouldShow =
                     pixels[0] == Color.rgb(250, 250, 250) && pixels[1] == Color.rgb(28, 135, 150);
+
+            Log.d("nahojjjen", "Screen scan, are you on the pokemon screen? answer: " + shouldShow);
+            Log.d("nahojjjen", "First pixel was: rgb "+ Color.red(pixels[0]) + " "+ Color.green(pixels[0])+ " "+ Color
+                    .blue(pixels[0]));
+            Log.d("nahojjjen", "First pixel was: rgb"+ Color.red(pixels[1]) + " "+ Color.green(pixels[1])+ " "+ Color
+                    .blue(pixels[1]));
             setIVButtonDisplay(shouldShow);
+        } else{
+            Log.d("nahojjjen", "Scan startup failed! Error");
         }
     }
 
@@ -1484,15 +1496,20 @@ public class Pokefly extends Service {
      * hide the IV Button.
      */
     private void setIVButtonDisplay(boolean show) {
+
+        Log.d("nahojjjen", "set show IV button: " + show);
         if (show && !ivButtonShown && !infoShownSent) {
+            Log.d("nahojjjen", "Trying to add iv button");
             windowManager.addView(ivButton, ivButtonParams);
             ivButtonShown = true;
         } else if (!show) {
             if (ivButtonShown) {
+                Log.d("nahojjjen", "trying to remove iv button");
                 windowManager.removeView(ivButton);
                 ivButtonShown = false;
             }
         }
+        Log.d("nahojjjen", "\n\n");
     }
 
     private int dpToPx(int dp) {

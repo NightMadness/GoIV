@@ -3,6 +3,7 @@ package com.kamron.pogoiv;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.util.LruCache;
 
 import com.google.common.base.Optional;
@@ -43,6 +44,7 @@ public class OcrHelper {
         this.candyWordFirst = isCandyWordFirst();
         this.nidoFemale = nidoFemale;
         this.nidoMale = nidoMale;
+        Log.d("nahojjjen", "Creating the ocr module success");
     }
 
     /**
@@ -57,6 +59,7 @@ public class OcrHelper {
         if (instance == null) {
             instance = new OcrHelper(dataPath, widthPixels, heightPixels, nidoFemale, nidoMale);
         }
+        Log.d("nahojjjen", "Initiating the OCR module successful");
         return instance;
     }
 
@@ -95,7 +98,9 @@ public class OcrHelper {
             tesseract.end();
             tesseract = null;
             instance = null;
+            Log.d("nahojjjen", "Exited hte ocr module succesfully");
         } else {
+            Log.d("nahojjjen", "Initiating the OCR module ERROR");
             Timber.e("Avoided NPE on OcrHelper.exit()");
             //The exception is to ensure we get a stack trace. It's not thrown.
             Timber.e(new Throwable());
