@@ -29,6 +29,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -381,7 +382,8 @@ public class Pokefly extends Service {
             @Override
             public void run() {
                 if (screenScanRetries > 0) {
-                    scanPokemonScreen();
+                    boolean ret = scanPokemonScreen();
+                    Log.d("Pokefly", String.format("scanPokemonScreen returned %s", ret));
                     screenScanRetries--;
                     screenScanHandler.postDelayed(screenScanRunnable, SCREEN_SCAN_DELAY_MS);
                 }
@@ -402,6 +404,7 @@ public class Pokefly extends Service {
         touchView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                Log.d("Pokefly", "onTouch");
                 if (event.getActionMasked() == MotionEvent.ACTION_OUTSIDE) {
                     screenScanHandler.removeCallbacks(screenScanRunnable);
                     screenScanHandler.postDelayed(screenScanRunnable, SCREEN_SCAN_DELAY_MS);
