@@ -412,7 +412,7 @@ public class Pokefly extends Service {
                 if (event.getActionMasked() == MotionEvent.ACTION_OUTSIDE) {
                     screenScanHandler.removeCallbacks(screenScanRunnable);
                     screenScanHandler.postDelayed(screenScanRunnable, SCREEN_SCAN_DELAY_MS);
-                    screenScanRetries = 2;
+                    screenScanRetries = 3;
                 }
                 return false;
             }
