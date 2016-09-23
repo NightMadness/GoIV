@@ -212,6 +212,8 @@ public class Pokefly extends Service {
     TextView resultsCombinations;
     @BindView(R.id.exResultCP)
     TextView exResultCP;
+    @BindView(R.id.exResultHP)
+    TextView exResultHP;
     @BindView(R.id.exResStardust)
     TextView exResStardust;
     @BindView(R.id.exResPrevScan)
@@ -1289,12 +1291,24 @@ public class Pokefly extends Service {
         Pokemon selectedPokemon = initPokemonSpinnerIfNeeded(ivScanResult.pokemon);
 
         setEstimateCpTextBox(ivScanResult, selectedLevel, selectedPokemon);
+        setEstimateHPTextBox(ivScanResult, selectedLevel, selectedPokemon);
         setEstimateCostTextboxes(ivScanResult, selectedLevel, selectedPokemon);
         exResLevel.setText(String.valueOf(selectedLevel));
         setEstimateLevelTextColor(selectedLevel);
         PluginHelper.populateAdvancedInformation(ivScanResult,this);
     }
 
+
+    /**
+     * Sets the "expected HP  textview" to the estimat HP in the powerup and evolution estimate box
+     *
+     * @param ivScanResult  the ivscanresult of the current pokemon
+     * @param selectedLevel The goal level the pokemon in ivScanresult pokemon should reach
+     */
+    private void setEstimateHPTextBox(IVScanResult ivScanResult, double selectedLevel, Pokemon selectedPokemon) {
+        String hpText = pokeInfoCalculator.getHPAtLevel(ivScanResult, selectedLevel, selectedPokemon) + "";
+        exResultHP.setText(hpText);
+    }
 
     /**
      * Sets the "expected cp textview" to (+x) or (-y) in the powerup and evolution estimate box depending on what's
