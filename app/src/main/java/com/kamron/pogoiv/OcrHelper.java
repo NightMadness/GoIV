@@ -340,24 +340,24 @@ public class OcrHelper {
 
 
     /**
-     * Gets the candy amount from a pokemon image.
+     * Gets the candy amount from a pokemon image, it will return absent if PokeSpam is disabled.
      *
      * @param pokemonImage the image of the whole screen
      * @return candyAmount the candy amount, or blank Optional object if nothing was found
      */
     private Optional<Integer> getCandyAmountFromImg(Bitmap pokemonImage) {
 
-        //disable getting CandyAmount if we dont have pokespam running
-        GoIVSettings Settings;
+        //Disable getting CandyAmount if we don't have PokeSpam enabled
+        GoIVSettings settings;
         try {
             //Anything better then getInstance(null)? should we let it crash?
-            Settings = GoIVSettings.getInstance(null);
+            settings = GoIVSettings.getInstance(null);
         } catch (Exception ex) {
-            //probably a crash due to getInstance
+            //Probably a crash due to getInstance
             return Optional.absent();
         }
 
-        if (Settings == null || !Settings.isPokeSpamEnabled()) {
+        if (settings == null || !settings.isPokeSpamEnabled()) {
             return Optional.absent();
         }
 
