@@ -123,7 +123,7 @@ android {
  * Project dependencies
  * compile - Compile library package into app APK
  * provided - Compile library package without included into app APK
- * apt - Compile library package without included into app APK (uses android-apt plugin for
+ * apt - Compile library package without included into app APK (uses android-apt GoIVPlugin for
  * annotation processing)
  */
 dependencies {

@@ -56,7 +56,8 @@ import com.kamron.pogoiv.logic.Data;
 import com.kamron.pogoiv.logic.IVCombination;
 import com.kamron.pogoiv.logic.IVScanResult;
 import com.kamron.pogoiv.logic.PokeInfoCalculator;
-import com.kamron.pogoiv.logic.PokeSpam;
+import com.kamron.pogoiv.plugins.PluginHelper;
+import com.kamron.pogoiv.plugins.PokeSpam.PokeSpam;
 import com.kamron.pogoiv.logic.Pokemon;
 import com.kamron.pogoiv.logic.PokemonNameCorrector;
 import com.kamron.pogoiv.logic.ScanContainer;
@@ -248,13 +249,8 @@ public class Pokefly extends Service {
     @BindView(R.id.rvResults)
     RecyclerView rvResults;
 
-    //PokeSpam
-    @BindView(R.id.llPokeSpamDialogInputContentBox)
-    LinearLayout pokeSpamDialogInputContentBox;
-    @BindView(R.id.llPokeSpam)
-    LinearLayout pokeSpamView;
-    @BindView(R.id.exResPokeSpam)
-    TextView exResPokeSpam;
+    @BindView(R.id.llGoIVPlugin)
+    LinearLayout llGoIVPlugin;
 
     // Refine by appraisal
     @BindView(R.id.attCheckbox)
@@ -1287,12 +1283,12 @@ public class Pokefly extends Service {
         setEstimateCostTextboxes(ivScanResult, selectedLevel, selectedPokemon);
         exResLevel.setText(String.valueOf(selectedLevel));
         setEstimateLevelTextColor(selectedLevel);
-
+        PluginHelper.populateAdvancedInformation(ivScanResult);
         setAndCalculatePokeSpamText(ivScanResult);
     }
 
     /**
-     * setAndCalculatePokeSpamText sets pokespamtext and makes it visible.
+     * setAndCalculatePokeSpamText sets PokeSpamtext and makes it visible.
      * @param ivScanResult IVScanResult object that contains the scan results, mainly needed to get candEvolutionCost
      *                     varible
      */

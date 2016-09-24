@@ -1,4 +1,4 @@
-package com.kamron.pogoiv.logic;
+package com.kamron.pogoiv.plugins.PokeSpam;
 
 import com.google.common.base.Optional;
 
@@ -52,5 +52,7 @@ public class PokeSpam {
         amountXP = 500 * totalEvolvable;
         amountXPWithLuckyEgg = (amountXP * 2);
     }
+
+
 
 }

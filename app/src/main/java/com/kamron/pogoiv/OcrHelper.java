@@ -338,7 +338,6 @@ public class OcrHelper {
         }
     }
 
-
     /**
      * Gets the candy amount from a pokemon image, it will return absent if PokeSpam is disabled.
      *

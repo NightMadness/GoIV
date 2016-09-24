@@ -1,5 +1,7 @@
 package com.kamron.pogoiv.logic;
 
+import com.kamron.pogoiv.plugins.PokeSpam.PokeSpam;
+
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
