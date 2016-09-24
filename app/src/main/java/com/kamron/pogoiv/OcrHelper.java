@@ -25,8 +25,8 @@ public class OcrHelper {
     private static OcrHelper instance = null;
     private TessBaseAPI tesseract = null;
     private final LruCache<String, String> ocrCache = new LruCache<>(200);
-    private final int heightPixels;
-    private final int widthPixels;
+    private  int heightPixels;
+    private  int widthPixels;
     private final boolean candyWordFirst;
     private final String nidoFemale;
     private final String nidoMale;
@@ -336,7 +336,7 @@ public class OcrHelper {
 
 
     /**
-     * Gets the candy amount from a pokenon image.
+     * Gets the candy amount from a pokemon image.
      *
      * @param pokemonImage the image of the whole screen
      * @return candyAmount the candy amount, or blank Optional object if nothing was found
@@ -376,13 +376,19 @@ public class OcrHelper {
      * @return an object
      */
     public ScanResult scanPokemon(Bitmap pokemonImage, int trainerLevel) {
-        double estimatedPokemonLevel = getPokemonLevelFromImg(pokemonImage, trainerLevel);
+
+        heightPixels = pokemonImage.getHeight();
+        widthPixels = pokemonImage.getHeight();
+
+       // double estimatedPokemonLevel = getPokemonLevelFromImg(pokemonImage, trainerLevel);
         String pokemonName = getPokemonNameFromImg(pokemonImage);
         String candyName = getCandyNameFromImg(pokemonImage);
         Optional<Integer> pokemonHP = getPokemonHPFromImg(pokemonImage);
         Optional<Integer> pokemonCP = getPokemonCPFromImg(pokemonImage);
         Optional<Integer> pokemonCandyAmount = getCandyAmountFromImg(pokemonImage);
 
-        return new ScanResult(estimatedPokemonLevel, pokemonName, candyName, pokemonHP, pokemonCP, pokemonCandyAmount);
+        return new ScanResult(0, pokemonName, candyName, pokemonHP, pokemonCP, pokemonCandyAmount);
+       // return new ScanResult(estimatedPokemonLevel, pokemonName, candyName, pokemonHP, pokemonCP,
+        // pokemonCandyAmount);
     }
 }
