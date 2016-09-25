@@ -1,6 +1,7 @@
 package com.kamron.pogoiv.plugins;
 
 import android.content.Context;
+import android.preference.PreferenceScreen;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -55,11 +56,14 @@ public abstract class GoIVPlugin {
     }
 
     @OverridingMethodsMustInvokeSuper
-    public void generateDialogInputAndChangeVisibility(LinearLayout llPluginDialogContent) {
+    public void generateDialogInputAndChangeVisibility(LinearLayout llPluginDialogContent, Context prfContext) {
     }
 
     @OverridingMethodsMustInvokeSuper
-    public void generateExpendedResultBoxAndChangeVisibility(LinearLayout llPluginExpendedResultBox) {
+    public void generateExpendedResultBoxAndChangeVisibility(LinearLayout llPluginExpendedResultBox, Context rcvContext) {
+    }
+
+    public void addSettingsDialog(PreferenceScreen preferences, Context rcvContext) {
     }
 
 }

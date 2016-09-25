@@ -258,7 +258,8 @@ public class Pokefly extends Service {
 
     @BindView(R.id.llPluginExpendedResultBox)
     LinearLayout llPluginExpendedResultBox;
-
+    @BindView(R.id.llPokeSpamDialogInputContentBox)
+    LinearLayout pokeSpamDialogInputContentBox;
     @BindView(R.id.llPluginDialogContent)
     LinearLayout llPluginDialogContent;
 
@@ -1011,7 +1012,7 @@ public class Pokefly extends Service {
             Toast.makeText(this, R.string.ivtext_no_possibilities, Toast.LENGTH_SHORT).show();
             return;
         }
-        PluginHelper.addPluginExpendedResultBox(llPluginExpendedResultBox);
+        PluginHelper.generateExpendedResultBoxAndChangeVisibility(llPluginExpendedResultBox, getBaseContext());
         addToRangeToClipboardIfSettingOn(ivScanResult);
         populateResultsBox(ivScanResult);
         boolean enableCompare = ScanContainer.scanContainer.prevScan != null;
@@ -1554,9 +1555,18 @@ public class Pokefly extends Service {
             onCheckButtonsLayout.setVisibility(View.GONE);
         }
         moveOverlayUpOrDownToMatchAppraisalBox();
-        PluginHelper.generateDialogInputAndChangeVisibility(llPluginDialogContent);
+        PluginHelper.generateDialogInputAndChangeVisibility(llPluginDialogContent, getBaseContext());
+        enableOrDisablePokeSpamBoxBasedOnSettings();
     }
 
+    private void enableOrDisablePokeSpamBoxBasedOnSettings() {
+        //enable/disable visibility based on PokeSpam enabled or not
+        if (GoIVSettings.getInstance(getApplicationContext()).isPokeSpamEnabled()) {
+            pokeSpamDialogInputContentBox.setVisibility(View.VISIBLE);
+        } else  {
+            pokeSpamDialogInputContentBox.setVisibility(View.GONE);
+        }
+    }
 
     /**
      * showInfoLayout

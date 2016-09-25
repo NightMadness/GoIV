@@ -15,6 +15,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.kamron.pogoiv.plugins.PluginHelper;
 import com.kamron.pogoiv.updater.AppUpdate;
 import com.kamron.pogoiv.updater.AppUpdateUtil;
 
@@ -99,6 +100,8 @@ public class SettingsActivity extends AppCompatActivity {
                 manualScreenshotModePreference.setChecked(true);
                 manualScreenshotModePreference.setEnabled(false);
             }
+            //move other prefrence screen screen?
+            PluginHelper.addSettingsDialog(getPreferenceScreen(), getActivity());
         }
     }
 }

@@ -1,5 +1,8 @@
 package com.kamron.pogoiv.plugins;
 
+import android.content.Context;
+import android.preference.Preference;
+import android.preference.PreferenceScreen;
 import android.widget.LinearLayout;
 
 import com.kamron.pogoiv.Pokefly;
@@ -38,17 +41,26 @@ public class PluginHelper {
         }
     }
 
-    public static void generateDialogInputAndChangeVisibility(LinearLayout llPluginDialogContent) {
+    public static void generateDialogInputAndChangeVisibility(LinearLayout llPluginDialogContent, Context rcvContext) {
         for (GoIVPlugin item : plugins) {
-            item.generateDialogInputAndChangeVisibility(llPluginDialogContent);
+            item.generateDialogInputAndChangeVisibility(llPluginDialogContent, rcvContext);
         }
-
     }
 
     @OverridingMethodsMustInvokeSuper
-    public static void addPluginExpendedResultBox(LinearLayout llPluginExpendedResultBox) {
+    public static void generateExpendedResultBoxAndChangeVisibility(LinearLayout llPluginExpendedResultBox, Context rcvContext) {
         for (GoIVPlugin item : plugins) {
-            item.generateExpendedResultBoxAndChangeVisibility(llPluginExpendedResultBox);
+            //if all are true we can disable llPluginExpendedResultBox
+            item.generateExpendedResultBoxAndChangeVisibility(llPluginExpendedResultBox, rcvContext);
         }
     }
+
+    @OverridingMethodsMustInvokeSuper
+    public static void addSettingsDialog(PreferenceScreen preferences, Context prfContext) {
+        //if all are true we can disable llPluginExpendedResultBox
+        for (GoIVPlugin item : plugins) {
+            item.addSettingsDialog(preferences, prfContext);
+        }
+    }
+
 }

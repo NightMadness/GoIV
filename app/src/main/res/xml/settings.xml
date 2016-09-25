@@ -15,12 +15,6 @@
         android:defaultValue="true"/>
 
     <SwitchPreference
-        android:key="manualScreenshotMode"
-        android:title="@string/manual_screenshot_mode_setting_title"
-        android:summary="@string/manual_screenshot_mode_setting_summary"
-        android:defaultValue="false" />
-
-    <SwitchPreference
         android:key="deleteScreenshots"
         android:title="@string/delete_screenshots_setting_title"
         android:summary="@string/delete_screenshots_setting_summary"
@@ -44,15 +38,14 @@
         android:summary="@string/auto_update_setting_summary"
         android:defaultValue="true"/>
 
-    <SwitchPreference
-        android:key="pokeSpamEnabled"
-        android:title="@string/PokeSpam_setting_title"
-        android:summary="@string/PokeSpam_setting_summary"
-        android:defaultValue="true"/>
-
     <Preference
         android:key="checkForUpdate"
         android:title="@string/check_for_update_setting_title"
         android:summary="@string/check_for_update_setting_summary" />
+    <SwitchPreference
+        android:key="manualScreenshotMode"
+        android:title="@string/manual_screenshot_mode_setting_title"
+        android:summary="@string/manual_screenshot_mode_setting_summary"
+        android:defaultValue="false" />
 
 </PreferenceScreen>
