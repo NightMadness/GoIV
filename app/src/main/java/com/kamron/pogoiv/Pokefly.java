@@ -1293,38 +1293,7 @@ public class Pokefly extends Service {
         exResLevel.setText(String.valueOf(selectedLevel));
         setEstimateLevelTextColor(selectedLevel);
         PluginHelper.populateAdvancedInformation(ivScanResult,this);
-//        setAndCalculatePokeSpamText(ivScanResult);
     }
-
-////PokeSpam
-//
-////    @BindView(R.id.llPokeSpam)
-////    LinearLayout pokeSpamView;
-//    @BindView(R.id.exResPokeSpam)
-//    TextView exResPokeSpam;
-//
-//
-//    /**
-//     * setAndCalculatePokeSpamText sets PokeSpamtext and makes it visible.
-//     * @param ivScanResult IVScanResult object that contains the scan results, mainly needed to get candEvolutionCost
-//     *                     varible
-//     */
-//    private void setAndCalculatePokeSpamText(IVScanResult ivScanResult) {
-//        if (GoIVSettings.getInstance(getApplicationContext()).isPokeSpamEnabled()
-//                && pokemonCandy.isPresent() && ivScanResult.pokemon != null
-//                &&  ivScanResult.pokemon.candyEvolutionCost > 0) {
-//            PokeSpam pokeSpamCalculator = new PokeSpam(pokemonCandy.get(),ivScanResult.pokemon.candyEvolutionCost);
-//
-//            String text = getString(R.string.pokespamformatedmessage,
-//                    pokeSpamCalculator.getTotalEvolvable(),pokeSpamCalculator.getEvolveRows(),
-//                    pokeSpamCalculator.getEvolveExtra());
-//            exResPokeSpam.setText(text);
-//            pokeSpamView.setVisibility(View.VISIBLE);
-//        } else {
-//            exResPokeSpam.setText("");
-//            pokeSpamView.setVisibility(View.GONE);
-//        }
-//    }
 
 
     /**
@@ -1538,18 +1507,9 @@ public class Pokefly extends Service {
             onCheckButtonsLayout.setVisibility(View.GONE);
         }
         moveOverlayUpOrDownToMatchAppraisalBox();
-        PluginHelper.addDialogInput(llPluginDialogContent);
-//        enableOrDisablePokeSpamBoxBasedOnSettings();
+        PluginHelper.generateDialogInputAndChangeVisibility(llPluginDialogContent);
     }
 
-//    private void enableOrDisablePokeSpamBoxBasedOnSettings() {
-//        //enable/disable visibility based on PokeSpam enabled or not
-//        if (GoIVSettings.getInstance(getApplicationContext()).isPokeSpamEnabled()) {
-//            pokeSpamView.setVisibility(View.VISIBLE);
-//        } else  {
-//            pokeSpamView.setVisibility(View.GONE);
-//        }
-//    }
 
     /**
      * showInfoLayout

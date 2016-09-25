@@ -38,9 +38,9 @@ public class PluginHelper {
         }
     }
 
-    public static void addDialogInput(LinearLayout llPluginDialogContent) {
+    public static void generateDialogInputAndChangeVisibility(LinearLayout llPluginDialogContent) {
         for (GoIVPlugin item : plugins) {
-            item.addDialogInput(llPluginDialogContent);
+            item.generateDialogInputAndChangeVisibility(llPluginDialogContent);
         }
 
     }
@@ -48,7 +48,7 @@ public class PluginHelper {
     @OverridingMethodsMustInvokeSuper
     public static void addPluginExpendedResultBox(LinearLayout llPluginExpendedResultBox) {
         for (GoIVPlugin item : plugins) {
-            item.addPluginExpendedResultBox(llPluginExpendedResultBox);
+            item.generateExpendedResultBoxAndChangeVisibility(llPluginExpendedResultBox);
         }
     }
 }

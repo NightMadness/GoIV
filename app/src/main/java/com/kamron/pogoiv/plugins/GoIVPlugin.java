@@ -55,11 +55,11 @@ public abstract class GoIVPlugin {
     }
 
     @OverridingMethodsMustInvokeSuper
-    public void addDialogInput(LinearLayout llPluginDialogContent) {
+    public void generateDialogInputAndChangeVisibility(LinearLayout llPluginDialogContent) {
     }
 
     @OverridingMethodsMustInvokeSuper
-    public void addPluginExpendedResultBox(LinearLayout llPluginExpendedResultBox) {
+    public void generateExpendedResultBoxAndChangeVisibility(LinearLayout llPluginExpendedResultBox) {
     }
 
 }
