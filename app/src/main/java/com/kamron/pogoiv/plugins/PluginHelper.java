@@ -1,7 +1,6 @@
 package com.kamron.pogoiv.plugins;
 
 import android.content.Context;
-import android.preference.Preference;
 import android.preference.PreferenceScreen;
 import android.widget.LinearLayout;
 
@@ -22,10 +21,9 @@ public class PluginHelper {
     private static ArrayList<GoIVPlugin> plugins = new ArrayList<GoIVPlugin>();
 
 
-    public static boolean isDoesHaveNeedForCandyOCR() {
+    public static boolean isNeedScanForCandy() {
         for (GoIVPlugin item : plugins) {
-            //use is enabled??
-            if (item.isEnabled() && item.isDoesHaveNeedForCandyOCR()) {
+            if (item.isEnabled() && item.isNeedScanForCandy()) {
                 return true;
             }
         }
@@ -46,17 +44,23 @@ public class PluginHelper {
         }
     }
 
-    public static void generateDialogInputAndChangeVisibility(LinearLayout llPluginDialogContent, Context rcvContext) {
+    /**
+     * This method will generate input on the main Dialog Screen.
+     */
+    public static void generateDialogInputAndChangeVisibility(LinearLayout llPluginDialogContent) {
         for (GoIVPlugin item : plugins) {
-            item.generateDialogInputAndChangeVisibility(llPluginDialogContent, rcvContext);
+            item.generateDialogInputAndChangeVisibility(llPluginDialogContent);
         }
     }
 
+    /**
+     * This method will generate input on the main ExpendedResultBox.
+     */
     @OverridingMethodsMustInvokeSuper
-    public static void generateExpendedResultBoxAndChangeVisibility(LinearLayout llPluginExpendedResultBox, Context rcvContext) {
+    public static void generateExpendedResultBoxAndChangeVisibility(LinearLayout llPluginExpendedResultBox) {
         for (GoIVPlugin item : plugins) {
             //if no method we can disable llPluginExpendedResultBox
-            item.generateExpendedResultBoxAndChangeVisibility(llPluginExpendedResultBox, rcvContext);
+            item.generateExpendedResultBoxAndChangeVisibility(llPluginExpendedResultBox);
         }
     }
 

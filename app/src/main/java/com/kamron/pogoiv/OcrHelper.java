@@ -347,7 +347,7 @@ public class OcrHelper {
      */
     private Optional<Integer> getCandyAmountFromImg(Bitmap pokemonImage) {
 
-        if (PluginHelper.isDoesHaveNeedForCandyOCR()) {
+        if (!PluginHelper.isNeedScanForCandy()) {
             return Optional.absent();
         }
 

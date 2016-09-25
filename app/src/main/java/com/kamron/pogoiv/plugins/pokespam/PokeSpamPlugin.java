@@ -23,7 +23,7 @@ import com.kamron.pogoiv.plugins.GoIVPlugin;
 public class PokeSpamPlugin extends GoIVPlugin {
 
     public PokeSpamPlugin(Context mainContext) {
-        super(mainContext, true, true, true, true);
+        super(mainContext, true);
     }
 
     private LinearLayout pokeSpamDialogView;
@@ -31,53 +31,26 @@ public class PokeSpamPlugin extends GoIVPlugin {
     private final String displayLabelForSpamTextView = "displayLabelForSpamTextView";
     public static final String pokeSpamEnabledKey = "pokeSpamEnabledKey";
 
-    //FIX ME!!! remove context if we dont need it
-    @Override
-    public void generateDialogInputAndChangeVisibility(LinearLayout llPluginDialogContent, Context rcvContext) {
-        /*
-        super.generateDialogInputAndChangeVisibility(llPluginDialogContent, rcvContext);
-        boolean pokeSpamEnabledKey = GoIVSettings.getInstance(rcvContext).isPokeSpamEnabled();
-        if (pokeSpamDialogView == null && pokeSpamEnabledKey) {
-
-                LayoutInflater inflater = LayoutInflater.from(rcvContext);
-                pokeSpamDialogView = (LinearLayout) inflater.inflate(R.layout.pokespamdialog, null, false);
-                super.addTextViewMap("etCandy", (TextView) pokeSpamDialogView.getChildAt(0));
-                super.addTextViewMap("candlyLabel", (TextView) pokeSpamDialogView.getChildAt(1));
-                llPluginDialogContent.addView(pokeSpamDialogView);
-                llPluginDialogContent.setVisibility(View.VISIBLE);
-
-        } else if (pokeSpamDialogView != null && pokeSpamEnabledKey) {
-            pokeSpamDialogView.setVisibility(View.VISIBLE);
-        } else if (pokeSpamDialogView != null && !pokeSpamEnabledKey) {
-            pokeSpamDialogView.setVisibility(View.GONE);
-        } else if (pokeSpamDialogView == null && !pokeSpamEnabledKey) {
-        }
-        */
-    }
 
     @Override
-    public void generateExpendedResultBoxAndChangeVisibility(LinearLayout llPluginExpendedResultBox, Context rcvContext) {
-        super.generateExpendedResultBoxAndChangeVisibility(llPluginExpendedResultBox, rcvContext);
-        boolean pokeSpamEnabled = GoIVSettings.getInstance(rcvContext).isSettingEnabled(pokeSpamEnabledKey);
+    public void generateExpendedResultBoxAndChangeVisibility(LinearLayout llPluginExpendedResultBox) {
+        boolean pokeSpamEnabled = GoIVSettings.getInstance(mainContext).isSettingEnabled(pokeSpamEnabledKey);
         if (pokeSpamExtendedResultsBoxView == null && pokeSpamEnabled) {
-
-                LayoutInflater inflater = LayoutInflater.from(rcvContext);
-                pokeSpamExtendedResultsBoxView = (LinearLayout) inflater.inflate(R.layout.pokespamexpenededresults,
-                        null, false);
-                super.addTextViewMap(displayLabelForSpamTextView,
-                        (TextView) pokeSpamExtendedResultsBoxView.getChildAt(2));
-                llPluginExpendedResultBox.addView(pokeSpamExtendedResultsBoxView);
-                llPluginExpendedResultBox.setVisibility(View.VISIBLE);
+            LayoutInflater inflater = LayoutInflater.from(mainContext);
+            pokeSpamExtendedResultsBoxView = (LinearLayout) inflater.inflate(R.layout.pokespamexpenededresults,
+                    null, false);
+            super.addTextViewMap(displayLabelForSpamTextView,
+                    (TextView) pokeSpamExtendedResultsBoxView.getChildAt(2));
+            llPluginExpendedResultBox.addView(pokeSpamExtendedResultsBoxView);
+            llPluginExpendedResultBox.setVisibility(View.VISIBLE);
 
         } else if (pokeSpamExtendedResultsBoxView != null && pokeSpamEnabled) {
             pokeSpamExtendedResultsBoxView.setVisibility(View.VISIBLE);
         } else if (pokeSpamExtendedResultsBoxView != null && !pokeSpamEnabled) {
             pokeSpamExtendedResultsBoxView.setVisibility(View.GONE);
-        } else if (pokeSpamExtendedResultsBoxView == null && !pokeSpamEnabled) {
         }
     }
 
-    //change this, pokefly is not a reliable reference
     @Override
     public void populateAdvancedInformation(IVScanResult ivScanResult, Pokefly pokefly) {
         setAndCalculatePokeSpamText(ivScanResult, pokefly.getPokemonCandy());
@@ -110,27 +83,20 @@ public class PokeSpamPlugin extends GoIVPlugin {
             pokeSpamExtendedResultsBoxView.setVisibility(View.GONE);
         }
     }
-    public void addSettingsDialog(PreferenceScreen preferences, Context prfContext) {
-//        <SwitchPreference
-//        android:key="pokeSpamEnabledKey"
-//        android:title="@string/PokeSpam_setting_title"
-//        android:summary="@string/PokeSpam_setting_summary"
-//        android:defaultValue="true"/>
 
+    public void addSettingsDialog(PreferenceScreen preferences, Context prfContext) {
         SwitchPreference pokeSpamEnabled = new SwitchPreference(prfContext);
 
         pokeSpamEnabled.setKey(pokeSpamEnabledKey);
         pokeSpamEnabled.setTitle(prfContext.getString(R.string.PokeSpam_setting_title));
         pokeSpamEnabled.setSummary(prfContext.getString(R.string.PokeSpam_setting_summary));
         pokeSpamEnabled.setDefaultValue(true);
-        //pokeSpamEnabledKey.setOrder(preferences.getPreferenceCount());
         preferences.addPreference(pokeSpamEnabled);
     }
 
     public boolean isEnabled() {
-       return GoIVSettings.getInstance(mainContext).isSettingEnabled(pokeSpamEnabledKey);
+        return GoIVSettings.getInstance(mainContext).isSettingEnabled(pokeSpamEnabledKey);
     }
-
 
 
 }

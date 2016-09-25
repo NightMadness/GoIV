@@ -94,24 +94,13 @@
 
         </LinearLayout>
 
-
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
             android:layout_weight="1"
-            android:id="@+id/llPluginDialogContent" android:visibility="gone">
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_weight="1"
-            android:id="@+id/llPokeSpamDialogInputContentBox" android:visibility="visible">
+            android:id="@+id/llcandyInputContentBox" android:visibility="visible">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -208,5 +197,15 @@
     <include layout="@layout/dialog_input_appraisal"
         android:visibility="gone"
         android:id="@+id/appraisalBox"/>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:id="@+id/llPluginDialogContent" android:visibility="gone">
+
+    </LinearLayout>
 
 </LinearLayout>

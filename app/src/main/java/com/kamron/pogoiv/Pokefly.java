@@ -63,8 +63,6 @@ import com.kamron.pogoiv.logic.PokemonNameCorrector;
 import com.kamron.pogoiv.logic.ScanContainer;
 import com.kamron.pogoiv.logic.ScanResult;
 import com.kamron.pogoiv.logic.UpgradeCost;
-import com.kamron.pogoiv.plugins.pokespam.PokeSpam;
-import com.kamron.pogoiv.plugins.pokespam.PokeSpamPlugin;
 import com.kamron.pogoiv.widgets.IVResultsAdapter;
 import com.kamron.pogoiv.widgets.PokemonSpinnerAdapter;
 
@@ -260,8 +258,8 @@ public class Pokefly extends Service {
 
     @BindView(R.id.llPluginExpendedResultBox)
     LinearLayout llPluginExpendedResultBox;
-    @BindView(R.id.llPokeSpamDialogInputContentBox)
-    LinearLayout pokeSpamDialogInputContentBox;
+    @BindView(R.id.llcandyInputContentBox)
+    LinearLayout candyInputContentBox;
     @BindView(R.id.llPluginDialogContent)
     LinearLayout llPluginDialogContent;
 
@@ -1014,7 +1012,7 @@ public class Pokefly extends Service {
             Toast.makeText(this, R.string.ivtext_no_possibilities, Toast.LENGTH_SHORT).show();
             return;
         }
-        PluginHelper.generateExpendedResultBoxAndChangeVisibility(llPluginExpendedResultBox, getBaseContext());
+        PluginHelper.generateExpendedResultBoxAndChangeVisibility(llPluginExpendedResultBox);
         addToRangeToClipboardIfSettingOn(ivScanResult);
         populateResultsBox(ivScanResult);
         boolean enableCompare = ScanContainer.scanContainer.prevScan != null;
@@ -1557,15 +1555,15 @@ public class Pokefly extends Service {
             onCheckButtonsLayout.setVisibility(View.GONE);
         }
         moveOverlayUpOrDownToMatchAppraisalBox();
-        PluginHelper.generateDialogInputAndChangeVisibility(llPluginDialogContent, getBaseContext());
-        enableOrDisablePokeSpamBoxBasedOnSettings();
+        PluginHelper.generateDialogInputAndChangeVisibility(llPluginDialogContent);
+        enableCandyCollectionBasedOnSettings();
     }
 
-    private void enableOrDisablePokeSpamBoxBasedOnSettings() {
-        if (PluginHelper.isDoesHaveNeedForCandyOCR()) {
-            pokeSpamDialogInputContentBox.setVisibility(View.VISIBLE);
+    private void enableCandyCollectionBasedOnSettings() {
+        if (PluginHelper.isNeedScanForCandy()) {
+            candyInputContentBox.setVisibility(View.VISIBLE);
         } else  {
-            pokeSpamDialogInputContentBox.setVisibility(View.GONE);
+            candyInputContentBox.setVisibility(View.GONE);
         }
     }
 
@@ -1615,6 +1613,7 @@ public class Pokefly extends Service {
                 checkIv();
             }
         }
+        enableCandyCollectionBasedOnSettings();
     }
 
     private <T> String optionalIntToString(Optional<T> src) {
