@@ -1,9 +1,14 @@
 package com.kamron.pogoiv.plugins;
 
+import android.widget.LinearLayout;
+
+import com.kamron.pogoiv.Pokefly;
 import com.kamron.pogoiv.logic.IVScanResult;
 
 import java.util.ArrayList;
 
+
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import lombok.Getter;
 
@@ -17,7 +22,7 @@ public class PluginHelper {
     private static boolean isDoesHaveNeedForCandyOCR = false;
 
     public static void addPlugin(GoIVPlugin plug) {
-        if (!isDoesHaveNeedForCandyOCR && plug.isDoesHaveNeedForCandyOCR()) {
+        if (!isDoesHaveNeedForCandyOCR && plug.isNeedScanForCandy()) {
             isDoesHaveNeedForCandyOCR = true;
         }
         plugins.add(plug);
@@ -27,9 +32,23 @@ public class PluginHelper {
         return plugins;
     }
 
-    public static void populateAdvancedInformation(IVScanResult ivScanResult) {
+    public static void populateAdvancedInformation(IVScanResult ivScanResult, Pokefly pokefly) {
         for (GoIVPlugin item : plugins) {
-            item.populateAdvancedInformation(ivScanResult);
+            item.populateAdvancedInformation(ivScanResult, pokefly);
+        }
+    }
+
+    public static void addDialogInput(LinearLayout llPluginDialogContent) {
+        for (GoIVPlugin item : plugins) {
+            item.addDialogInput(llPluginDialogContent);
+        }
+
+    }
+
+    @OverridingMethodsMustInvokeSuper
+    public static void addPluginExpendedResultBox(LinearLayout llPluginExpendedResultBox) {
+        for (GoIVPlugin item : plugins) {
+            item.addPluginExpendedResultBox(llPluginExpendedResultBox);
         }
     }
 }

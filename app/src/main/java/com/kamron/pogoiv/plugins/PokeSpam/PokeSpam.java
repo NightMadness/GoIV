@@ -1,4 +1,4 @@
-package com.kamron.pogoiv.plugins.PokeSpam;
+package com.kamron.pogoiv.plugins.pokespam;
 
 import com.google.common.base.Optional;
 

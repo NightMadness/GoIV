@@ -1,6 +1,6 @@
 package com.kamron.pogoiv.logic;
 
-import com.kamron.pogoiv.plugins.PokeSpam.PokeSpam;
+import com.kamron.pogoiv.plugins.pokespam.PokeSpam;
 
 import org.junit.Test;
 

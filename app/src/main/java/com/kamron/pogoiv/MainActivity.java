@@ -42,7 +42,7 @@ import android.widget.TextView;
 
 import com.kamron.pogoiv.logic.Data;
 import com.kamron.pogoiv.plugins.PluginHelper;
-import com.kamron.pogoiv.plugins.PokeSpam.PokeSpamPlugin;
+import com.kamron.pogoiv.plugins.pokespam.PokeSpamPlugin;
 import com.kamron.pogoiv.updater.AppUpdate;
 import com.kamron.pogoiv.updater.AppUpdateUtil;
 import com.kamron.pogoiv.updater.DownloadUpdateService;

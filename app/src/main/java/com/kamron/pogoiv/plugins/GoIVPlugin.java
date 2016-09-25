@@ -1,16 +1,16 @@
 package com.kamron.pogoiv.plugins;
 
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.kamron.pogoiv.GoIVSettings;
+import com.kamron.pogoiv.Pokefly;
 import com.kamron.pogoiv.logic.IVScanResult;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import lombok.Getter;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 /**
  * Created by NightMadness on 9/24/2016.
@@ -18,40 +18,48 @@ import lombok.Getter;
 
 public abstract class GoIVPlugin {
 
-    public GoIVPlugin(Context mainContext,boolean isDoesHaveSettingsDialog, boolean isDoesHaveNeedForCandyOCR, boolean
+    public GoIVPlugin(Context mainContext, boolean isNeedSettingsDialog, boolean isNeedScanForCandy, boolean
             isSettingsDialog,
-                      boolean isDoesNeedTopopulateAdvancedInformation) {
+                      boolean isAdvancedInformation) {
         this.mainContext = mainContext;
-        this.isDoesHaveSettingsDialog = isDoesHaveSettingsDialog;
-        this.isDoesHaveNeedForCandyOCR = isDoesHaveNeedForCandyOCR;
+        this.isNeedSettingsDialog = isNeedSettingsDialog;
+        this.isNeedScanForCandy = isNeedScanForCandy;
         this.isSettingsDialog = isSettingsDialog;
-        this.isDoesNeedTopopulateAdvancedInformation = isDoesNeedTopopulateAdvancedInformation;
+        this.isAdvancedInformation = isAdvancedInformation;
     }
 
     protected Context mainContext;
-    private boolean isDoesHaveSettingsDialog = false;
-    private boolean isDoesHaveNeedForCandyOCR = false;
+    private boolean isNeedSettingsDialog = false;
+    private boolean isNeedScanForCandy = false;
     private boolean isSettingsDialog = false;
-    private boolean isDoesNeedTopopulateAdvancedInformation = false;
+    private boolean isAdvancedInformation = false;
     protected static Map<String, TextView> pluginTextViewMap = new HashMap<String, TextView>();
 
     public void addTextViewMap(String ViewName, TextView vm)    {
         pluginTextViewMap.put(ViewName,vm);
     }
 
-    public boolean isDoesHaveSettingsDialog() {
-        return isDoesHaveSettingsDialog;
+    public boolean isNeedSettingsDialog() {
+        return isNeedSettingsDialog;
     }
 
-    public boolean isDoesHaveNeedForCandyOCR() {
-        return isDoesHaveNeedForCandyOCR;
+    public boolean isNeedScanForCandy() {
+        return isNeedScanForCandy;
     }
 
     public boolean isSettingsDialog() {
         return isSettingsDialog;
     }
 
-    public void populateAdvancedInformation(IVScanResult ivScanResult) {
+    public void populateAdvancedInformation(IVScanResult ivScanResult, Pokefly pokefly) {
+    }
+
+    @OverridingMethodsMustInvokeSuper
+    public void addDialogInput(LinearLayout llPluginDialogContent) {
+    }
+
+    @OverridingMethodsMustInvokeSuper
+    public void addPluginExpendedResultBox(LinearLayout llPluginExpendedResultBox) {
     }
 
 }

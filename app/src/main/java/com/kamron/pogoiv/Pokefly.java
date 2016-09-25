@@ -56,8 +56,8 @@ import com.kamron.pogoiv.logic.Data;
 import com.kamron.pogoiv.logic.IVCombination;
 import com.kamron.pogoiv.logic.IVScanResult;
 import com.kamron.pogoiv.logic.PokeInfoCalculator;
+
 import com.kamron.pogoiv.plugins.PluginHelper;
-import com.kamron.pogoiv.plugins.PokeSpam.PokeSpam;
 import com.kamron.pogoiv.logic.Pokemon;
 import com.kamron.pogoiv.logic.PokemonNameCorrector;
 import com.kamron.pogoiv.logic.ScanContainer;
@@ -249,8 +249,12 @@ public class Pokefly extends Service {
     @BindView(R.id.rvResults)
     RecyclerView rvResults;
 
-    @BindView(R.id.llGoIVPlugin)
-    LinearLayout llGoIVPlugin;
+    @BindView(R.id.llPluginExpendedResultBox)
+    LinearLayout llPluginExpendedResultBox;
+
+    @BindView(R.id.llPluginDialogContent)
+    LinearLayout llPluginDialogContent;
+
 
     // Refine by appraisal
     @BindView(R.id.attCheckbox)
@@ -263,6 +267,11 @@ public class Pokefly extends Service {
 
     private String pokemonName;
     private String candyName;
+
+    public Optional<Integer> getPokemonCandy() {
+        return pokemonCandy;
+    }
+
     private Optional<Integer> pokemonCandy = Optional.absent();
     private Optional<Integer> pokemonCP = Optional.absent();
     private Optional<Integer> pokemonHP = Optional.absent();
@@ -990,7 +999,7 @@ public class Pokefly extends Service {
             Toast.makeText(this, R.string.ivtext_no_possibilities, Toast.LENGTH_SHORT).show();
             return;
         }
-
+        PluginHelper.addPluginExpendedResultBox(llPluginExpendedResultBox);
         addToRangeToClipboardIfSettingOn(ivScanResult);
         populateResultsBox(ivScanResult);
         boolean enableCompare = ScanContainer.scanContainer.prevScan != null;
@@ -1283,31 +1292,39 @@ public class Pokefly extends Service {
         setEstimateCostTextboxes(ivScanResult, selectedLevel, selectedPokemon);
         exResLevel.setText(String.valueOf(selectedLevel));
         setEstimateLevelTextColor(selectedLevel);
-        PluginHelper.populateAdvancedInformation(ivScanResult);
-        setAndCalculatePokeSpamText(ivScanResult);
+        PluginHelper.populateAdvancedInformation(ivScanResult,this);
+//        setAndCalculatePokeSpamText(ivScanResult);
     }
 
-    /**
-     * setAndCalculatePokeSpamText sets PokeSpamtext and makes it visible.
-     * @param ivScanResult IVScanResult object that contains the scan results, mainly needed to get candEvolutionCost
-     *                     varible
-     */
-    private void setAndCalculatePokeSpamText(IVScanResult ivScanResult) {
-        if (GoIVSettings.getInstance(getApplicationContext()).isPokeSpamEnabled()
-                && pokemonCandy.isPresent() && ivScanResult.pokemon != null
-                &&  ivScanResult.pokemon.candyEvolutionCost > 0) {
-            PokeSpam pokeSpamCalculator = new PokeSpam(pokemonCandy.get(),ivScanResult.pokemon.candyEvolutionCost);
-
-            String text = getString(R.string.pokespamformatedmessage,
-                    pokeSpamCalculator.getTotalEvolvable(),pokeSpamCalculator.getEvolveRows(),
-                    pokeSpamCalculator.getEvolveExtra());
-            exResPokeSpam.setText(text);
-            pokeSpamView.setVisibility(View.VISIBLE);
-        } else {
-            exResPokeSpam.setText("");
-            pokeSpamView.setVisibility(View.GONE);
-        }
-    }
+////PokeSpam
+//
+////    @BindView(R.id.llPokeSpam)
+////    LinearLayout pokeSpamView;
+//    @BindView(R.id.exResPokeSpam)
+//    TextView exResPokeSpam;
+//
+//
+//    /**
+//     * setAndCalculatePokeSpamText sets PokeSpamtext and makes it visible.
+//     * @param ivScanResult IVScanResult object that contains the scan results, mainly needed to get candEvolutionCost
+//     *                     varible
+//     */
+//    private void setAndCalculatePokeSpamText(IVScanResult ivScanResult) {
+//        if (GoIVSettings.getInstance(getApplicationContext()).isPokeSpamEnabled()
+//                && pokemonCandy.isPresent() && ivScanResult.pokemon != null
+//                &&  ivScanResult.pokemon.candyEvolutionCost > 0) {
+//            PokeSpam pokeSpamCalculator = new PokeSpam(pokemonCandy.get(),ivScanResult.pokemon.candyEvolutionCost);
+//
+//            String text = getString(R.string.pokespamformatedmessage,
+//                    pokeSpamCalculator.getTotalEvolvable(),pokeSpamCalculator.getEvolveRows(),
+//                    pokeSpamCalculator.getEvolveExtra());
+//            exResPokeSpam.setText(text);
+//            pokeSpamView.setVisibility(View.VISIBLE);
+//        } else {
+//            exResPokeSpam.setText("");
+//            pokeSpamView.setVisibility(View.GONE);
+//        }
+//    }
 
 
     /**
@@ -1521,17 +1538,18 @@ public class Pokefly extends Service {
             onCheckButtonsLayout.setVisibility(View.GONE);
         }
         moveOverlayUpOrDownToMatchAppraisalBox();
-        enableOrDisablePokeSpamBoxBasedOnSettings();
+        PluginHelper.addDialogInput(llPluginDialogContent);
+//        enableOrDisablePokeSpamBoxBasedOnSettings();
     }
 
-    private void enableOrDisablePokeSpamBoxBasedOnSettings() {
-        //enable/disable visibility based on PokeSpam enabled or not
-        if (GoIVSettings.getInstance(getApplicationContext()).isPokeSpamEnabled()) {
-            pokeSpamDialogInputContentBox.setVisibility(View.VISIBLE);
-        } else  {
-            pokeSpamDialogInputContentBox.setVisibility(View.GONE);
-        }
-    }
+//    private void enableOrDisablePokeSpamBoxBasedOnSettings() {
+//        //enable/disable visibility based on PokeSpam enabled or not
+//        if (GoIVSettings.getInstance(getApplicationContext()).isPokeSpamEnabled()) {
+//            pokeSpamView.setVisibility(View.VISIBLE);
+//        } else  {
+//            pokeSpamView.setVisibility(View.GONE);
+//        }
+//    }
 
     /**
      * showInfoLayout

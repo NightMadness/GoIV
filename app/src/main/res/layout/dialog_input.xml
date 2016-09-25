@@ -93,13 +93,24 @@
                 android:inputType="number"/>
 
         </LinearLayout>
+
+
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
             android:layout_weight="1"
-            android:id="@+id/llPokeSpamDialogInputContentBox">
+            android:id="@+id/llPluginDialogContent" android:visibility="gone">
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:id="@+id/llPokeSpamDialogInputContentBox" android:visibility="visible">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -126,8 +137,9 @@
     </LinearLayout>
 
     <Space
-        android:layout_width="match_parent"
-        android:layout_height="10dp"/>
+    android:layout_width="match_parent"
+    android:layout_height="10dp"
+    layout_width="match_parent"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
