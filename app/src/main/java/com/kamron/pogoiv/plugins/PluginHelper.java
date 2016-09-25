@@ -13,21 +13,26 @@ import java.util.ArrayList;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
-import lombok.Getter;
-
 /**
  * Created by NightMadness on 9/24/2016.
  */
 
-@Getter
+
 public class PluginHelper {
     private static ArrayList<GoIVPlugin> plugins = new ArrayList<GoIVPlugin>();
-    private static boolean isDoesHaveNeedForCandyOCR = false;
+
+
+    public static boolean isDoesHaveNeedForCandyOCR() {
+        for (GoIVPlugin item : plugins) {
+            //use is enabled??
+            if (item.isEnabled() && item.isDoesHaveNeedForCandyOCR()) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public static void addPlugin(GoIVPlugin plug) {
-        if (!isDoesHaveNeedForCandyOCR && plug.isNeedScanForCandy()) {
-            isDoesHaveNeedForCandyOCR = true;
-        }
         plugins.add(plug);
     }
 
@@ -50,7 +55,7 @@ public class PluginHelper {
     @OverridingMethodsMustInvokeSuper
     public static void generateExpendedResultBoxAndChangeVisibility(LinearLayout llPluginExpendedResultBox, Context rcvContext) {
         for (GoIVPlugin item : plugins) {
-            //if all are true we can disable llPluginExpendedResultBox
+            //if no method we can disable llPluginExpendedResultBox
             item.generateExpendedResultBoxAndChangeVisibility(llPluginExpendedResultBox, rcvContext);
         }
     }
@@ -62,5 +67,6 @@ public class PluginHelper {
             item.addSettingsDialog(preferences, prfContext);
         }
     }
+
 
 }

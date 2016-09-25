@@ -66,4 +66,13 @@ public abstract class GoIVPlugin {
     public void addSettingsDialog(PreferenceScreen preferences, Context rcvContext) {
     }
 
+    public boolean isDoesHaveNeedForCandyOCR() {
+        return false;
+    }
+
+    public boolean isEnabled() {
+        return false;
+    }
+
+
 }

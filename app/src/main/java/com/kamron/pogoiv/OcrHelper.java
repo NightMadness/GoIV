@@ -9,6 +9,7 @@ import com.google.common.base.Optional;
 import com.googlecode.tesseract.android.TessBaseAPI;
 import com.kamron.pogoiv.logic.Data;
 import com.kamron.pogoiv.logic.ScanResult;
+import com.kamron.pogoiv.plugins.PluginHelper;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -346,17 +347,7 @@ public class OcrHelper {
      */
     private Optional<Integer> getCandyAmountFromImg(Bitmap pokemonImage) {
 
-        //Disable getting CandyAmount if we don't have PokeSpam enabled
-        GoIVSettings settings;
-        try {
-            //Anything better then getInstance(null)? should we let it crash?
-            settings = GoIVSettings.getInstance(null);
-        } catch (Exception ex) {
-            //Probably a crash due to getInstance
-            return Optional.absent();
-        }
-
-        if (settings == null || !settings.isPokeSpamEnabled()) {
+        if (PluginHelper.isDoesHaveNeedForCandyOCR()) {
             return Optional.absent();
         }
 

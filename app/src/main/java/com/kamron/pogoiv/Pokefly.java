@@ -63,6 +63,8 @@ import com.kamron.pogoiv.logic.PokemonNameCorrector;
 import com.kamron.pogoiv.logic.ScanContainer;
 import com.kamron.pogoiv.logic.ScanResult;
 import com.kamron.pogoiv.logic.UpgradeCost;
+import com.kamron.pogoiv.plugins.pokespam.PokeSpam;
+import com.kamron.pogoiv.plugins.pokespam.PokeSpamPlugin;
 import com.kamron.pogoiv.widgets.IVResultsAdapter;
 import com.kamron.pogoiv.widgets.PokemonSpinnerAdapter;
 
@@ -1560,8 +1562,7 @@ public class Pokefly extends Service {
     }
 
     private void enableOrDisablePokeSpamBoxBasedOnSettings() {
-        //enable/disable visibility based on PokeSpam enabled or not
-        if (GoIVSettings.getInstance(getApplicationContext()).isPokeSpamEnabled()) {
+        if (PluginHelper.isDoesHaveNeedForCandyOCR()) {
             pokeSpamDialogInputContentBox.setVisibility(View.VISIBLE);
         } else  {
             pokeSpamDialogInputContentBox.setVisibility(View.GONE);
