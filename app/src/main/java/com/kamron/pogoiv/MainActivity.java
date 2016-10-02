@@ -163,6 +163,53 @@ public class MainActivity extends AppCompatActivity {
         npTrainerLevel.setWrapSelectorWheel(false);
         npTrainerLevel.setValue(trainerLevel);
 
+//        npTrainerLevel.setOnScrollChangeListener(new NumberPicker.OnScrollChangeListener() {
+//            @Override
+//            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+//                Toast.makeText(getBaseContext(),"a",Toast.LENGTH_LONG);
+//            }
+//        });
+//        npTrainerLevel.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+//            @Override
+//            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+//                Toast.makeText(getBaseContext(),"b",Toast.LENGTH_LONG);
+//            }
+//        });
+            npTrainerLevel.setOnScrollListener(new NumberPicker.OnScrollListener() {
+            @Override
+            public void onScrollStateChange(NumberPicker numberPicker, int scrollState) {
+                if (scrollState == SCROLL_STATE_IDLE && !numberPicker.hasFocus() && Pokefly.isRunning()) {
+                    stopService(new Intent(MainActivity.this, Pokefly.class));
+                    if (screen != null) {
+                        screen.exit();
+                    }
+                    batterySaver = settings.isManualScreenshotModeEnabled();
+                    setupDisplaySizeInfo();
+                    trainerLevel = setupTrainerLevel(npTrainerLevel);
+
+                    Data.setupArcPoints(arcInit, arcRadius, trainerLevel);
+
+                    if (batterySaver) {
+                        startPokeFly();
+                    } else {
+                        startScreenService();
+                    }
+
+                }
+            }
+        });
+
+//        npTrainerLevel.setOnFocusChangeListener(new NumberPicker.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus)
+//            {
+//                Toast.makeText(getApplicationContext(),"d",
+//                        Toast.LENGTH_LONG);
+//            }
+//        });
+
+
+
         displayMetrics = this.getResources().getDisplayMetrics();
         WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         rawDisplayMetrics = new DisplayMetrics();
@@ -330,6 +377,7 @@ public class MainActivity extends AppCompatActivity {
         if (settings.shouldLaunchPokemonGo()) {
             openPokemonGoApp();
         }
+        enableDisableTrainerLevelPicker(false);
     }
 
     private void updateLaunchButtonText(boolean isPokeflyRunning) {
@@ -340,6 +388,15 @@ public class MainActivity extends AppCompatActivity {
         } else {
             launchButton.setText(R.string.main_start);
         }
+        enableDisableTrainerLevelPicker(!isPokeflyRunning);
+    }
+
+    /**
+     * enables/disabled trainer level picker.
+     */
+    private void enableDisableTrainerLevelPicker(boolean enabled) {
+        final NumberPicker npTrainerLevel = (NumberPicker) findViewById(R.id.trainerLevel);
+        npTrainerLevel.setEnabled(enabled);
     }
 
     private String getVersionName() {
