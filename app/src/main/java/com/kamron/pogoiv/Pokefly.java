@@ -149,7 +149,7 @@ public class Pokefly extends Service {
     private WindowManager.LayoutParams touchViewParams;
     private Handler screenScanHandler;
     private Runnable screenScanRunnable;
-    private static final int SCREEN_SCAN_DELAY_MS = 1000;
+    private static final int SCREEN_SCAN_DELAY_MS = 500;
     private static final int SCREEN_SCAN_RETRIES = 3;
     private int screenScanRetries;
 
@@ -2018,6 +2018,45 @@ public class Pokefly extends Service {
         if (show && !ivButtonShown && !infoShownSent) {
             windowManager.addView(ivButton, ivButtonParams);
             ivButtonShown = true;
+
+            Bitmap bmp = screen.grabScreen();
+            if (bmp == null) {
+
+                bmp = screen.grabScreen();
+                if (bmp == null) {
+                    Toast.makeText(this,"no screenshot again?!",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+            ScanResult res = ocr.scanPokemon(bmp, trainerLevel);
+
+
+            Pokemon pokemon = pokeInfoCalculator.get( corrector.getPossiblePokemon(res.getPokemonName(), res
+                    .getCandyName()).pokemonId);
+            if (pokemon == null) {
+                Toast.makeText(this,"no pokemon found for " + res.getPokemonName() ,Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            IVScanResult ivScanResult = pokeInfoCalculator.getIVPossibilities(pokemon, res.getEstimatedPokemonLevel(),
+                    res.getPokemonHP().or(0),
+                    res.getPokemonCP().or(0));
+            if (ivScanResult != null || ivScanResult.getHighestIVCombination() != null) {
+                try {
+                    Toast.makeText(this, "Best IV: " + ivScanResult.getHighestIVCombination().toString(), Toast
+                            .LENGTH_LONG).show();
+                } catch(Exception x) {
+                    Toast.makeText(this,"something calculated wrong for" +  res.getPokemonName() + "/n" + x
+                            .getMessage() ,Toast
+                            .LENGTH_LONG)
+                            .show();
+                }
+            }
+            else {
+                Toast.makeText(this,"No result for " +  res.getPokemonName() ,Toast.LENGTH_LONG).show();
+            }
+
+
         } else if (!show) {
             if (ivButtonShown) {
                 windowManager.removeView(ivButton);
