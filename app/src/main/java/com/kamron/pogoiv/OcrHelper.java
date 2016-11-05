@@ -159,9 +159,19 @@ public class OcrHelper {
      * @return the evolution cost (or -1 if absent) wrapped in Optional.of(), or Optional.absent() on scan failure
      */
     private Optional<Integer> getPokemonEvolutionCostFromImgUncached(Bitmap evolutionCostImage) {
+        //if we see white(ish) color at Pixel 0,50 RGB(250,250,250) we know that there is no evolve button, we return -1
+        //if we don't see the white line we assume an evolve button exits, if we found nothing we should return absent.
+        boolean foundOffWhiteLine = evolutionCostImage.getPixel(0,evolutionCostImage.getHeight()/2) == Color.rgb(250,
+                250,250);
+
+        if (foundOffWhiteLine) {
+            return Optional.of(-1);
+        }
+
         //clean the image
         //the dark color used for text in pogo is approximately rgb 76,112,114 if you can afford evo
         //and the red color is rgb 255 95 100 when you cant afford the evolution
+
         Bitmap evolutionCostImageCanAfford = replaceColors(evolutionCostImage, false, 68, 105, 108, Color.WHITE, 28,
                 false);
         Bitmap evolutionCostImageCannotAfford = replaceColors(evolutionCostImage, false, 255, 95, 100, Color.WHITE, 17,
@@ -171,7 +181,7 @@ public class OcrHelper {
         boolean cannotAffordIsBlank = isOnlyWhite(evolutionCostImageCannotAfford);
         //check if fully evolved
         if (affordIsBlank && cannotAffordIsBlank) { //if there's no red or black text, there's no text at all.
-            return Optional.of(-1);
+              return Optional.absent();
         }
 
         //use the correctly refined image (refined for red or black text)
