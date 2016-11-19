@@ -442,6 +442,11 @@ public class OcrHelper {
                 } else {
                     return Optional.absent();
                 }
+                //Split on Space, if we found space, take the first part
+                hpParts = hpStr.split(" ");
+                if (hpParts.length > 0) {
+                    hpStr = hpParts[1];
+                }
 
                 return Optional.of(Integer.parseInt(fixOcrLettersToNums(hpStr)));
             } catch (NumberFormatException e) {
