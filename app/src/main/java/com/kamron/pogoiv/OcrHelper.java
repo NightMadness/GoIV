@@ -1,8 +1,15 @@
 package com.kamron.pogoiv;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.ContextWrapper;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.v7.app.NotificationCompat;
 import android.util.LruCache;
 
 import com.google.common.base.Optional;
@@ -13,6 +20,7 @@ import com.kamron.pogoiv.logic.ScanResult;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Random;
 
 import timber.log.Timber;
 
@@ -31,9 +39,10 @@ public class OcrHelper {
     private final String nidoFemale;
     private final String nidoMale;
     private final boolean isPokeSpamEnabled;
+    private final Context cntx;
 
     private OcrHelper(String dataPath, int widthPixels, int heightPixels, String nidoFemale, String nidoMale,
-                      boolean isPokeSpamEnabled) {
+                      boolean isPokeSpamEnabled, Context cntx) {
         tesseract = new TessBaseAPI();
         tesseract.init(dataPath, "eng");
         tesseract.setPageSegMode(TessBaseAPI.PageSegMode.PSM_SINGLE_LINE);
@@ -45,6 +54,7 @@ public class OcrHelper {
         this.nidoFemale = nidoFemale;
         this.nidoMale = nidoMale;
         this.isPokeSpamEnabled = isPokeSpamEnabled;
+        this.cntx = cntx;
     }
 
     /**
@@ -55,9 +65,10 @@ public class OcrHelper {
      * @return Bitmap with replaced colors
      */
     public static OcrHelper init(String dataPath, int widthPixels, int heightPixels, String nidoFemale,
-                                 String nidoMale, boolean isPokeSpamEnabled) {
+                                 String nidoMale, boolean isPokeSpamEnabled, Context cntx) {
         if (instance == null) {
-            instance = new OcrHelper(dataPath, widthPixels, heightPixels, nidoFemale, nidoMale, isPokeSpamEnabled);
+            instance = new OcrHelper(dataPath, widthPixels, heightPixels, nidoFemale, nidoMale, isPokeSpamEnabled,
+                    cntx);
         }
         return instance;
     }
@@ -353,6 +364,7 @@ public class OcrHelper {
     public Bitmap getImageCrop(Bitmap img, double xStart, double yStart, double xWidth, double yHeight) {
         Bitmap crop = Bitmap.createBitmap(img, (int) (widthPixels * xStart), (int) (heightPixels * yStart),
                 (int) (widthPixels * xWidth), (int) (heightPixels * yHeight));
+        debugNotification(crop);
         return crop;
     }
 
@@ -489,8 +501,8 @@ public class OcrHelper {
      */
     private String getPokemonIdentifierFromImg(Bitmap pokemonImage) {
         Bitmap infoRow = Bitmap.createBitmap(pokemonImage,
-                (int)Math.round(widthPixels * .1f), (int)Math.round(heightPixels / 1.714286f),
-                (int)Math.round(widthPixels * .8f), (int)Math.round(heightPixels / 25.26316f));
+                (int) Math.round(widthPixels * .1f), (int) Math.round(heightPixels / 1.714286f),
+                (int) Math.round(widthPixels * .8f), (int) Math.round(heightPixels / 25.26316f));
         tesseract.setImage(infoRow);
         String uniqueText = tesseract.getUTF8Text();
 
@@ -552,5 +564,36 @@ public class OcrHelper {
 
         return new ScanResult(estimatedPokemonLevel, pokemonName, candyName, pokemonHP, pokemonCP,
                 pokemonCandyAmount, pokemonUpgradeCost, pokemonUniqueIdentifier);
+    }
+
+    private void debugNotification(Bitmap crop) {
+        assert BuildConfig.DEBUG;
+
+        Intent openAppIntent = new Intent(cntx, MainActivity.class);
+
+        PendingIntent openAppPendingIntent = PendingIntent.getActivity(
+                cntx, 0, openAppIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+        Notification notification = new NotificationCompat.Builder(cntx)
+                .setOngoing(false)
+                .setCategory(NotificationCompat.CATEGORY_SERVICE)
+                .setSmallIcon(R.drawable.notification_icon)
+                .setContentTitle(Thread.currentThread().getStackTrace()[4].getMethodName())
+                .setContentText(Thread.currentThread().getStackTrace()[5].getMethodName())
+                .setContentIntent(openAppPendingIntent)
+                .setStyle(new android.support.v4.app.NotificationCompat.BigPictureStyle().bigPicture(crop))
+                .setPriority(Notification.PRIORITY_HIGH)
+                .setGroup("1")
+                .build();
+
+        //notification.notify();
+                NotificationManager mNotifyMgr =
+                        (NotificationManager) cntx.getSystemService(cntx.NOTIFICATION_SERVICE);
+
+                mNotifyMgr.notify(
+                        Thread.currentThread().getStackTrace()[4].getLineNumber(), notification);
+
+
     }
 }

@@ -1890,7 +1890,7 @@ public class Pokefly extends Service {
         ocr = OcrHelper.init(extdir, displayMetrics.widthPixels, displayMetrics.heightPixels,
                 pokeInfoCalculator.get(28).name,
                 pokeInfoCalculator.get(31).name,
-                GoIVSettings.getInstance(this).isPokeSpamEnabled());
+                GoIVSettings.getInstance(this).isPokeSpamEnabled(), getApplicationContext());
     }
 
 
