@@ -193,6 +193,7 @@ public class PokeInfoCalculator {
         IVScanResult returner;
         //It's safe to proceed if *one* is not 10, though it takes a bit longer.
         if (pokemonHP != 10 || pokemonCP != 10) {
+//        if (pokemonHP != 10 || pokemonCP != 10 || estimatedPokemonLevel > 1) {
             returner = ScanContainer.createIVScanResult(selectedPokemon, estimatedPokemonLevel, pokemonCP, false);
             for (int staminaIV = 0; staminaIV < 16; staminaIV++) {
                 int hp = (int) Math.max(Math.floor((baseStamina + staminaIV) * lvlScalar), 10);

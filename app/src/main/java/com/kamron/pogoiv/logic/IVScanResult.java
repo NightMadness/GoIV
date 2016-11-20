@@ -190,34 +190,29 @@ public class IVScanResult {
         int lowest;
         int highest;
 
-        switch (selectedItemPosition) {
-            case 1:
-                lowest = 81;
-                highest = 100;
-                break;
-            case 2:
-                lowest = 66;
-                highest = 80;
-                break;
-            case 3:
-                lowest = 51;
-                highest = 65;
-                break;
-            case 4:
-                lowest = 0;
-                highest = 50;
-                break;
-            default:
-                lowest = 0;
-                highest = 100;
-        }
+        GetPrecentageRange precentageRange = new GetPrecentageRange(selectedItemPosition);
+        lowest = precentageRange.getLowest();
+        highest = precentageRange.getHighest();
 
         ArrayList<IVCombination> refinedList = new ArrayList<>();
 
-        for (IVCombination comb : iVCombinations) {
+        if (tooManyPossibilities) {
 
-            if (comb.percentPerfect >= lowest && comb.percentPerfect <= highest) {
-                refinedList.add(comb);
+           // Math.round((att + def + sta) / 45f * 100) = Max
+            int lowestCombo = (int) Math.round(lowest * 0.15f);
+
+            int highestCombo = (int) Math.round(highest * 0.15f);
+
+            refinedList.add(new IVCombination(lowestCombo, lowestCombo, lowestCombo));
+            refinedList.add(new IVCombination(highestCombo, highestCombo, highestCombo));
+        }
+            else {
+
+            for (IVCombination comb : iVCombinations) {
+
+                if (comb.percentPerfect >= lowest && comb.percentPerfect <= highest) {
+                    refinedList.add(comb);
+                }
             }
         }
 
@@ -269,5 +264,43 @@ public class IVScanResult {
             }
         }
         iVCombinations = refinedList;
+    }
+
+    public class GetPrecentageRange {
+        private int lowest;
+        private int highest;
+
+        public GetPrecentageRange(int selectedItemPosition) {
+            switch (selectedItemPosition) {
+                case 1:
+                    lowest = 81;
+                    highest = 100;
+                    break;
+                case 2:
+                    lowest = 66;
+                    highest = 80;
+                    break;
+                case 3:
+                    lowest = 51;
+                    highest = 65;
+                    break;
+                case 4:
+                    lowest = 0;
+                    highest = 50;
+                    break;
+                default:
+                    lowest = 0;
+                    highest = 100;
+            }
+        }
+
+        public int getLowest() {
+            return lowest;
+        }
+
+        public int getHighest() {
+            return highest;
+        }
+
     }
 }
